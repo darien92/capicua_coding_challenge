@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.darien.capicua.R;
+import com.darien.capicua.commons.Constants;
 import com.darien.capicua.models.AlbumModel;
 import com.darien.capicua.viewmodels.AlbumsViewModel;
 import com.darien.capicua.views.adapters.AlbumsAdapter;
@@ -71,6 +73,9 @@ public class MainActivity extends AppCompatActivity implements AlbumsAdapter.Alb
 
     @Override
     public void onClick(AlbumsAdapter albumsAdapter, int albumId, String albumName) {
-        Toast.makeText(this, "" + albumId + "  " + albumName, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getBaseContext(), AlbumActivity.class);
+        intent.putExtra(Constants.ALBUM_ID_KEY, albumId);
+        intent.putExtra(Constants.ALBUM_NAME_KEY, albumName);
+        startActivity(intent);
     }
 }

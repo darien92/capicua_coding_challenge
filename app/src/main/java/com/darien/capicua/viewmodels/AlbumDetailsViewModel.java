@@ -2,13 +2,14 @@ package com.darien.capicua.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.darien.capicua.repositories.AlbumDetailsRepository;
 import com.darien.capicua.room.entities.PictureEntity;
 
 import java.util.List;
 
-public class AlbumDetailsViewModel implements AlbumDetailsRepository.AlbumDetailsRepositoryListener {
+public class AlbumDetailsViewModel extends ViewModel implements AlbumDetailsRepository.AlbumDetailsRepositoryListener {
     private final AlbumDetailsRepository repository;
     private final MutableLiveData<List<PictureEntity>> pictures;
 
