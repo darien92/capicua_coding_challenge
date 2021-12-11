@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.darien.capicua.R;
 import com.darien.capicua.commons.Constants;
 
@@ -27,7 +28,7 @@ public class ImageDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String imageUrl = intent.getStringExtra(Constants.IMAGE_URL_KEY);
-        Glide.with(this).load(imageUrl).dontAnimate().into(imageToShow);
+        Glide.with(this).load(imageUrl).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageToShow);
         tvTitle.setText(intent.getStringExtra(Constants.IMAGE_NAME_KEY));
         imgBack.setOnClickListener(view -> finish());
     }

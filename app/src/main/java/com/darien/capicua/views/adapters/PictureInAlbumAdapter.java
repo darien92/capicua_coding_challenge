@@ -75,7 +75,7 @@ public class PictureInAlbumAdapter extends RecyclerView.Adapter<PictureInAlbumAd
 
         public void bindData(String thumbnailUrl, String imgUrl, String title) {
             tvAlbumTitle.setText(title);
-            Glide.with(view).load(thumbnailUrl).into(imgAlbum);
+            Glide.with(view.getContext()).load(thumbnailUrl).into(imgAlbum);
             imgAlbum.setOnClickListener(view -> {
                 if (listener != null) {
                     listener.onPictureSelected(PictureInAlbumViewHolder.this, imgUrl, title);

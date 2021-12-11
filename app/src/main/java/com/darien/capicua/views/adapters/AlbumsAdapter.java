@@ -73,7 +73,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumViewH
 
         public void bindData(String imgUrl, String title, int albumId, String albumName) {
             tvAlbumTitle.setText(title);
-            Glide.with(view).load(imgUrl).into(imgAlbum);
+            Glide.with(view.getContext()).load(imgUrl).into(imgAlbum);
             imgAlbum.setOnClickListener(view -> {
                 if (listener != null) {
                     listener.onClick(AlbumViewHolder.this, albumId, albumName);
