@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CapicuaCodingChallenge">
         <activity
+            android:name=".views.activities.ImageDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.activities.AlbumActivity"
             android:exported="false" />
         <activity
