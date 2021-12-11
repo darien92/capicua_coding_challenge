@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -18,6 +19,7 @@ import com.darien.capicua.R;
 import com.darien.capicua.commons.Constants;
 import com.darien.capicua.room.entities.PictureEntity;
 import com.darien.capicua.viewmodels.AlbumDetailsViewModel;
+import com.darien.capicua.views.adapters.PictureInAlbumAdapter;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class AlbumActivity extends AppCompatActivity {
     ProgressBar pbLoading;
     RecyclerView rvPictures;
     TextView tvAlbumName;
+    PictureInAlbumAdapter pictureInAlbumAdapter;
 
     private AlbumDetailsViewModel viewModel;
 
@@ -45,6 +48,9 @@ public class AlbumActivity extends AppCompatActivity {
         tvAlbumName = findViewById(R.id.tv_album_name_album_activity);
         imgBack.setOnClickListener(view -> finish());
         viewModel = new ViewModelProvider(this).get(AlbumDetailsViewModel.class);
+        pictureInAlbumAdapter = new PictureInAlbumAdapter();
+        rvPictures.setLayoutManager(new GridLayoutManager(this, 3));
+        rvPictures.setAdapter(pictureInAlbumAdapter);
 
         viewModel.getPictures().observe(this, this::receivePictures);
         tvAlbumName.setText(intent.getStringExtra(Constants.ALBUM_NAME_KEY));
@@ -57,8 +63,7 @@ public class AlbumActivity extends AppCompatActivity {
 
     private void receivePictures(List<PictureEntity> pictures) {
         hideLoading();
-
-        //TODO: handle pictures in RecyclerView
+        pictureInAlbumAdapter.setData(pictures);
     }
 
     private void hideLoading() {

@@ -12,8 +12,6 @@ public class CreateAlbumsFromRequestUC {
             if (!seenAlbums.contains(item.getAlbumId())) {
                 albums.add(new AlbumModel(item.getAlbumId(), "Album " + item.getAlbumId(), item.getThumbnailUrl() + ".png"));
                 seenAlbums.add(item.getAlbumId());
-            } else {
-                albums.get(albums.size() - 1).setAlbumImageUrl(item.getThumbnailUrl() + ".png");
             }
         }
     }

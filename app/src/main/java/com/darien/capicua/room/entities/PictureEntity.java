@@ -22,10 +22,14 @@ public class PictureEntity {
     @ColumnInfo(name = "thumbnail_url")
     public String thumbnailUrl;
 
-    public PictureEntity(int albumId, int pictureId, String pictureUrl, String thumbnailUrl) {
+    @ColumnInfo(name = "title")
+    public String title;
+
+    public PictureEntity(int albumId, int pictureId, String pictureUrl, String thumbnailUrl, String title) {
         this.albumId = albumId;
         this.pictureId = pictureId;
         this.pictureUrl = pictureUrl;
         this.thumbnailUrl = thumbnailUrl;
+        this.title = title;
     }
 }

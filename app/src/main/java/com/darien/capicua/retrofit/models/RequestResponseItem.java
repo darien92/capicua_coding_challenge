@@ -7,11 +7,11 @@ public class RequestResponseItem {
     private String url;
     private String thumbnailUrl;
 
-    public int getAlbumId(){
+    public Integer getAlbumId(){
         return albumId;
     }
 
-    public int getId(){
+    public Integer getId(){
         return id;
     }
 

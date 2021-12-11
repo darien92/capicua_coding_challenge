@@ -63,7 +63,7 @@ public class AlbumsRepository implements RequestImagesService.RetrofitServiceDel
         createAlbumsFromRequestUC.createAlbumsFromRequestResponse(items, seenAlbums, albums);
         List<PictureEntity> picturesToInsert = new ArrayList<>();
         for (RequestResponseItem item : items) {
-            picturesToInsert.add(new PictureEntity(item.getAlbumId(), item.getId(), item.getUrl(), item.getThumbnailUrl()));
+            picturesToInsert.add(new PictureEntity(item.getAlbumId(), item.getId(), item.getUrl() + ".png", item.getThumbnailUrl() + ".png", item.getTitle()));
         }
         databaseService.deleteAll(picturesToInsert);
     }

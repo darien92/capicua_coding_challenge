@@ -10,10 +10,8 @@ public class CreateAlbumsFromDbUC {
     public void createAlbumsFromDb(List<PictureEntity> pictures, HashSet<Integer> seenAlbums, List<AlbumModel> albums) {
         for (PictureEntity picture : pictures) {
             if (!seenAlbums.contains(picture.albumId)) {
-                albums.add(new AlbumModel(picture.albumId, "Album " + picture.albumId, picture.thumbnailUrl + ".png"));
+                albums.add(new AlbumModel(picture.albumId, "Album " + picture.albumId, picture.thumbnailUrl));
                 seenAlbums.add(picture.albumId);
-            } else {
-                albums.get(albums.size() - 1).setAlbumImageUrl(picture.thumbnailUrl + ".png");
             }
         }
     }
