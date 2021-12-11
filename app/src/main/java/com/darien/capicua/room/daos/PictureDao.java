@@ -18,4 +18,7 @@ public interface PictureDao {
 
     @Insert
     void insertAll(PictureEntity... users);
+
+    @Query("SELECT * FROM pictures where album_id=:albumId")
+    List<PictureEntity> getAlbum(int albumId);
 }
