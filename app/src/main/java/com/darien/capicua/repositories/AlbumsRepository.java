@@ -5,17 +5,21 @@ import com.darien.capicua.retrofit.models.RequestResponseItem;
 import com.darien.capicua.retrofit.service.RequestImagesService;
 import com.darien.capicua.room.entities.PictureEntity;
 import com.darien.capicua.room.services.AlbumsDatabaseService;
+import com.darien.capicua.usecases.CreateAlbumsFromDbUC;
+import com.darien.capicua.usecases.CreateAlbumsFromRequestUC;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 public class AlbumsRepository implements RequestImagesService.RetrofitServiceDelegate, AlbumsDatabaseService.AlbumsDatabaseServiceDelegate {
-    RequestImagesService retrofitService;
-    AlbumsDatabaseService databaseService;
-    List<AlbumModel> albums;
-    HashSet<Integer> seenAlbums;
-    List<AlbumsRepositoryDelegate> listeners;
+    private final RequestImagesService retrofitService;
+    private final AlbumsDatabaseService databaseService;
+    private final List<AlbumModel> albums;
+    private final HashSet<Integer> seenAlbums;
+    private final List<AlbumsRepositoryDelegate> listeners;
+    private final CreateAlbumsFromRequestUC createAlbumsFromRequestUC;
+    private final CreateAlbumsFromDbUC createAlbumsFromDbUC;
 
     public AlbumsRepository() {
         retrofitService = new RequestImagesService();
@@ -25,28 +29,8 @@ public class AlbumsRepository implements RequestImagesService.RetrofitServiceDel
         albums = new ArrayList<>();
         seenAlbums = new HashSet<>();
         listeners = new ArrayList<>();
-    }
-
-    private void createAlbumsFromRequestResponse(List<RequestResponseItem> items) {
-        for (RequestResponseItem item : items) {
-            if (!seenAlbums.contains(item.getAlbumId())) {
-                albums.add(new AlbumModel(item.getAlbumId(), "Album " + item.getAlbumId(), item.getThumbnailUrl() + ".png"));
-                seenAlbums.add(item.getAlbumId());
-            } else {
-                albums.get(albums.size() - 1).setAlbumImageUrl(item.getThumbnailUrl() + ".png");
-            }
-        }
-    }
-
-    private void createAlbumsFromDb(List<PictureEntity> pictures) {
-        for (PictureEntity picture : pictures) {
-            if (!seenAlbums.contains(picture.albumId)) {
-                albums.add(new AlbumModel(picture.albumId, "Album " + picture.albumId, picture.thumbnailUrl + ".png"));
-                seenAlbums.add(picture.albumId);
-            } else {
-                albums.get(albums.size() - 1).setAlbumImageUrl(picture.thumbnailUrl + ".png");
-            }
-        }
+        createAlbumsFromRequestUC = new CreateAlbumsFromRequestUC();
+        createAlbumsFromDbUC = new CreateAlbumsFromDbUC();
     }
 
     private void sendAlbums() {
@@ -76,7 +60,7 @@ public class AlbumsRepository implements RequestImagesService.RetrofitServiceDel
 
     @Override
     public void onSuccess(RequestImagesService retrofitService, List<RequestResponseItem> items) {
-        createAlbumsFromRequestResponse(items);
+        createAlbumsFromRequestUC.createAlbumsFromRequestResponse(items, seenAlbums, albums);
         List<PictureEntity> picturesToInsert = new ArrayList<>();
         for (RequestResponseItem item : items) {
             picturesToInsert.add(new PictureEntity(item.getAlbumId(), item.getId(), item.getUrl(), item.getThumbnailUrl()));
@@ -106,7 +90,7 @@ public class AlbumsRepository implements RequestImagesService.RetrofitServiceDel
 
     @Override
     public void onDataFetched(AlbumsDatabaseService service, List<PictureEntity> pictures) {
-        createAlbumsFromDb(pictures);
+        createAlbumsFromDbUC.createAlbumsFromDb(pictures, seenAlbums, albums);
         sendAlbums();
     }
 
