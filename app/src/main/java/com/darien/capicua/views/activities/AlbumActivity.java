@@ -23,7 +23,7 @@ import com.darien.capicua.views.adapters.PictureInAlbumAdapter;
 
 import java.util.List;
 
-public class AlbumActivity extends AppCompatActivity {
+public class AlbumActivity extends AppCompatActivity implements PictureInAlbumAdapter.PictureInAlbumAdapterListener {
     ImageView imgBack;
     ConstraintLayout loadingContainer;
     ProgressBar pbLoading;
@@ -49,6 +49,7 @@ public class AlbumActivity extends AppCompatActivity {
         imgBack.setOnClickListener(view -> finish());
         viewModel = new ViewModelProvider(this).get(AlbumDetailsViewModel.class);
         pictureInAlbumAdapter = new PictureInAlbumAdapter();
+        pictureInAlbumAdapter.setListener(this);
         rvPictures.setLayoutManager(new GridLayoutManager(this, 3));
         rvPictures.setAdapter(pictureInAlbumAdapter);
 
@@ -69,5 +70,13 @@ public class AlbumActivity extends AppCompatActivity {
     private void hideLoading() {
         pbLoading.clearAnimation();
         loadingContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPictureSelected(PictureInAlbumAdapter adapter, String imgUrl, String imgName) {
+        Intent intent = new Intent(getBaseContext(), ImageDetailsActivity.class);
+        intent.putExtra(Constants.IMAGE_URL_KEY, imgUrl);
+        intent.putExtra(Constants.IMAGE_NAME_KEY, imgName);
+        startActivity(intent);
     }
 }

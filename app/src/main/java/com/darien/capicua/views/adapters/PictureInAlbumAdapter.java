@@ -19,6 +19,12 @@ import java.util.List;
 public class PictureInAlbumAdapter extends RecyclerView.Adapter<PictureInAlbumAdapter.PictureInAlbumViewHolder> {
     private final List<PictureEntity> pictures = new ArrayList<>();
 
+    private PictureInAlbumAdapterListener listener;
+
+    public void setListener(PictureInAlbumAdapterListener listener) {
+        this.listener = listener;
+    }
+
     public void setData(List<PictureEntity> albums) {
         this.pictures.addAll(albums);
         notifyDataSetChanged();
@@ -29,6 +35,14 @@ public class PictureInAlbumAdapter extends RecyclerView.Adapter<PictureInAlbumAd
     public PictureInAlbumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         PictureInAlbumViewHolder viewHolder = new PictureInAlbumViewHolder(LayoutInflater
                 .from(parent.getContext()).inflate(R.layout.album_view, parent, false));
+        viewHolder.setPictureInAlbumListener(new PictureInAlbumVHListener() {
+            @Override
+            public void onPictureSelected(PictureInAlbumViewHolder viewHolder, String imgUrl, String imgName) {
+                if (listener != null) {
+                    listener.onPictureSelected(PictureInAlbumAdapter.this, imgUrl, imgName);
+                }
+            }
+        });
         return viewHolder;
     }
 
@@ -46,6 +60,11 @@ public class PictureInAlbumAdapter extends RecyclerView.Adapter<PictureInAlbumAd
         private final View view;
         private final ImageView imgAlbum;
         private final TextView tvAlbumTitle;
+        private PictureInAlbumVHListener listener;
+
+        public void setPictureInAlbumListener(PictureInAlbumVHListener listener) {
+            this.listener = listener;
+        }
 
         public PictureInAlbumViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +76,19 @@ public class PictureInAlbumAdapter extends RecyclerView.Adapter<PictureInAlbumAd
         public void bindData(String thumbnailUrl, String imgUrl, String title) {
             tvAlbumTitle.setText(title);
             Glide.with(view).load(thumbnailUrl).into(imgAlbum);
+            imgAlbum.setOnClickListener(view -> {
+                if (listener != null) {
+                    listener.onPictureSelected(PictureInAlbumViewHolder.this, imgUrl, title);
+                }
+            });
         }
+    }
+
+    interface PictureInAlbumVHListener {
+        void onPictureSelected(PictureInAlbumViewHolder viewHolder, String imgUrl, String imgName);
+    }
+
+    public interface PictureInAlbumAdapterListener {
+        void onPictureSelected(PictureInAlbumAdapter adapter, String imgUrl, String imgName);
     }
 }

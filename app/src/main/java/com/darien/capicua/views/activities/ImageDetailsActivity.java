@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,8 +26,14 @@ public class ImageDetailsActivity extends AppCompatActivity {
         tvTitle = findViewById(R.id.tv_title_details_activity);
 
         Intent intent = getIntent();
+        String imageUrl = intent.getStringExtra(Constants.IMAGE_URL_KEY);
+        Glide.with(this).load(imageUrl).dontAnimate().into(imageToShow);
         tvTitle.setText(intent.getStringExtra(Constants.IMAGE_NAME_KEY));
-        Glide.with(this).load(intent.getStringExtra(Constants.IMAGE_URL_KEY)).into(imageToShow);
         imgBack.setOnClickListener(view -> finish());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
