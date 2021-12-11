@@ -16,7 +16,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RequestImagesService {
-
     private final RequestImagesApi api;
     private final List<RetrofitServiceDelegate> listeners = new ArrayList<>();
 
