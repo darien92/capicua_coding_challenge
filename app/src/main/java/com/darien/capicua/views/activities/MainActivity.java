@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.darien.capicua.R;
 import com.darien.capicua.models.AlbumModel;
@@ -17,7 +18,7 @@ import com.darien.capicua.views.adapters.AlbumsAdapter;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AlbumsAdapter.AlbumsAdapterListener {
     private AlbumsViewModel albumsViewModel;
     private ConstraintLayout loadingView, noAlbumsViews, albumsView;
     private RecyclerView rvAlbums;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupRecyclerView(){
         albumsAdapter = new AlbumsAdapter();
+        albumsAdapter.setOnClickListener(this);
         rvAlbums.setLayoutManager(new GridLayoutManager(this, 3));
         rvAlbums.setAdapter(albumsAdapter);
     }
@@ -65,5 +67,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             albumsAdapter.setData(albums);
         }
+    }
+
+    @Override
+    public void onClick(AlbumsAdapter albumsAdapter, int albumId, String albumName) {
+        Toast.makeText(this, "" + albumId + "  " + albumName, Toast.LENGTH_SHORT).show();
     }
 }
